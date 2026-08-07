@@ -3,7 +3,7 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 RUN npm run build -- --configuration=production
@@ -12,7 +12,7 @@ RUN npm run build -- --configuration=production
 FROM nginx:alpine
 
 # Copie les fichiers buildés vers le dossier de Nginx
-COPY --from=build /app/dist/LTS-frontend /usr/share/nginx/html
+COPY --from=build /app/dist/LTS-frontend/browser /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
